@@ -9,7 +9,14 @@ const messageSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: true
+    required: true,
+    // Allow empty strings for streaming functionality
+    validate: {
+      validator: function(v) {
+        return v !== undefined && v !== null;
+      },
+      message: props => `Content cannot be null or undefined`
+    }
   },
   timestamp: {
     type: Date,

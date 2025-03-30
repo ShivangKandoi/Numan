@@ -2,6 +2,7 @@ import { Box, Text, Flex } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message } from '../../contexts/ChatContext';
+import { useEffect, useState } from 'react';
 
 interface MessageBubbleProps {
   message: Message;
@@ -9,6 +10,19 @@ interface MessageBubbleProps {
 
 export const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isUser = message.role === 'user';
+  const isStreaming = message.isStreaming === true;
+  const [displayCursor, setDisplayCursor] = useState(true);
+
+  // Blinking cursor effect when streaming
+  useEffect(() => {
+    if (!isStreaming) return;
+
+    const interval = setInterval(() => {
+      setDisplayCursor(prev => !prev);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [isStreaming]);
 
   return (
     <Flex
@@ -32,6 +46,9 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {message.content}
             </ReactMarkdown>
+            {isStreaming && displayCursor && (
+              <Box as="span" display="inline-block" ml="1" backgroundColor="blue.400" width="2px" height="16px" animation="blink 1s infinite" />
+            )}
           </Box>
         )}
       </Box>

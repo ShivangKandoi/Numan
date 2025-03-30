@@ -5,7 +5,8 @@ import {
   createChat, 
   addMessage, 
   deleteChat,
-  updateChatTitle
+  updateChatTitle,
+  updateMessage
 } from '../controllers/chatController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -19,6 +20,7 @@ router.get('/', getUserChats);
 router.get('/:chatId', getChatById);
 router.post('/', createChat);
 router.post('/:chatId/messages', addMessage);
+router.put('/:chatId/messages/:messageId', updateMessage);
 router.delete('/:chatId', deleteChat);
 router.put('/:chatId/title', updateChatTitle);
 

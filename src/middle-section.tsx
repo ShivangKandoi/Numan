@@ -61,7 +61,7 @@ const ArrowUpIcon = () => (
 
 export function MiddleSection() {
   const [inputValue, setInputValue] = useState('');
-  const { currentChat, isLoading, sendMessage, createChat } = useChat();
+  const { currentChat, isLoading, sendStreamingMessage, createStreamingChat } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -76,9 +76,9 @@ export function MiddleSection() {
     setInputValue('');
     
     if (currentChat) {
-      await sendMessage(message);
+      await sendStreamingMessage(message);
     } else {
-      await createChat(message);
+      await createStreamingChat(message);
     }
     
     // Focus the input after sending

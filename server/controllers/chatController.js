@@ -91,6 +91,42 @@ export const addMessage = async (req, res) => {
   }
 };
 
+// Update a specific message in a chat
+export const updateMessage = async (req, res) => {
+  try {
+    const { chatId, messageId } = req.params;
+    const { content } = req.body;
+    
+    // Find chat and ensure it belongs to the user
+    const chat = await Chat.findOne({ 
+      _id: chatId,
+      userId: req.user.id
+    });
+    
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+    
+    // Find the message to update
+    const messageIndex = chat.messages.findIndex(
+      msg => msg._id.toString() === messageId
+    );
+    
+    if (messageIndex === -1) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+    
+    // Update the message content
+    chat.messages[messageIndex].content = content;
+    
+    const updatedChat = await chat.save();
+    res.status(200).json(updatedChat);
+  } catch (error) {
+    console.error('Update message error:', error);
+    res.status(500).json({ message: 'Server error while updating message' });
+  }
+};
+
 // Delete a chat
 export const deleteChat = async (req, res) => {
   try {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateResponse } from '../controllers/aiController.js';
+import { generateResponse, streamAIResponse } from '../controllers/aiController.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -8,5 +8,6 @@ const router = express.Router();
 router.use(protect);
 
 router.post('/generate', generateResponse);
+router.post('/stream', streamAIResponse);
 
 export default router; 
